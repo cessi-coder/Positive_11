@@ -1,0 +1,2170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Surprise</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#050505;
+  color:white;
+  font-family:Georgia,"Times New Roman",serif;
+  text-align:center;
+  overflow-x:hidden;
+}
+
+button{
+  font-family:inherit;
+}
+
+.page{
+  display:none;
+  min-height:100vh;
+  padding:40px 20px;
+  position:relative;
+}
+
+.page.active{
+  display:block;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  width:500px;
+  height:500px;
+  background:radial-gradient(
+    circle,
+    rgba(212,175,55,0.12),
+    transparent 70%
+  );
+  top:-180px;
+  left:50%;
+  transform:translateX(-50%);
+  pointer-events:none;
+}
+
+/* SPARKLES */
+
+.sparkle{
+  position:fixed;
+  color:#d4af37;
+  font-size:12px;
+  opacity:.6;
+  animation:floatSparkle 6s infinite ease-in-out;
+  pointer-events:none;
+}
+
+.s1{
+  left:10%;
+  top:20%;
+}
+
+.s2{
+  left:80%;
+  top:15%;
+  animation-delay:1s;
+}
+
+.s3{
+  left:20%;
+  top:75%;
+  animation-delay:2s;
+}
+
+.s4{
+  left:75%;
+  top:80%;
+  animation-delay:3s;
+}
+
+.s5{
+  left:50%;
+  top:30%;
+  animation-delay:1.5s;
+}
+
+@keyframes floatSparkle{
+
+  0%,100%{
+    transform:translateY(0) rotate(0deg);
+    opacity:.3;
+  }
+
+  50%{
+    transform:translateY(-25px) rotate(180deg);
+    opacity:1;
+  }
+
+}
+
+/* HOME */
+
+.home-content{
+  max-width:700px;
+  margin:auto;
+  padding-top:15vh;
+}
+
+.small-title{
+  letter-spacing:5px;
+  font-size:13px;
+  color:#aaa;
+  text-transform:uppercase;
+}
+
+h1{
+  font-size:60px;
+  margin:15px 0;
+  color:#d4af37;
+  text-shadow:0 0 25px rgba(212,175,55,.25);
+}
+
+.subtitle{
+  color:#bbb;
+  font-size:18px;
+  margin-bottom:40px;
+}
+
+/* BUTTONS */
+
+.start-btn,
+.back-btn,
+.action-btn{
+
+  border:1px solid #d4af37;
+  background:transparent;
+  color:#d4af37;
+  padding:13px 28px;
+  border-radius:30px;
+  font-size:15px;
+  cursor:pointer;
+  transition:.3s;
+
+}
+
+.start-btn:hover,
+.back-btn:hover,
+.action-btn:hover{
+
+  background:#d4af37;
+  color:#050505;
+  box-shadow:0 0 25px rgba(212,175,55,.35);
+
+}
+
+/* TITLES */
+
+.page-title{
+  font-size:38px;
+  color:#d4af37;
+  margin-top:20px;
+}
+
+.page-subtitle{
+  color:#aaa;
+  margin-bottom:40px;
+}
+
+/* CHOICES */
+
+.choice-container{
+
+  max-width:900px;
+  margin:auto;
+
+  display:flex;
+  justify-content:center;
+  gap:25px;
+  flex-wrap:wrap;
+
+}
+
+.choice{
+
+  width:240px;
+  min-height:180px;
+
+  border:1px solid rgba(212,175,55,.4);
+  border-radius:18px;
+
+  padding:30px 20px;
+
+  background:linear-gradient(
+    145deg,
+    #111,
+    #080808
+  );
+
+  cursor:pointer;
+  transition:.35s;
+
+}
+
+.choice:hover{
+
+  transform:translateY(-8px);
+
+  border-color:#d4af37;
+
+  box-shadow:
+    0 15px 40px
+    rgba(212,175,55,.12);
+
+}
+
+.choice-icon{
+
+  font-size:40px;
+  color:#d4af37;
+  margin-bottom:15px;
+
+}
+
+.choice h3{
+  margin:8px 0;
+  color:white;
+}
+
+.choice p{
+  color:#999;
+  font-size:14px;
+}
+
+/* LETTER */
+
+.envelope-area{
+
+  margin:80px auto 40px;
+
+  width:320px;
+  max-width:95vw;
+
+  height:500px;
+
+  position:relative;
+
+  cursor:pointer;
+
+}
+
+.letter-paper{
+
+  width:270px;
+  max-width:82vw;
+
+  min-height:240px;
+  height:auto;
+
+  background:#fffdf7;
+  color:#222;
+
+  position:absolute;
+
+  left:50%;
+  bottom:15px;
+
+  padding:30px 23px;
+
+  border-radius:4px;
+
+  z-index:5;
+
+  opacity:0;
+
+  transform:translate(-50%,20px);
+
+  transition:
+    transform 1s ease,
+    opacity .8s ease;
+
+  box-shadow:
+    0 10px 30px
+    rgba(0,0,0,.5);
+
+  text-align:left;
+
+  max-height:70vh;
+
+  overflow-y:auto;
+  overflow-x:hidden;
+
+}
+
+.letter-paper.show{
+
+  opacity:1;
+
+  transform:
+    translate(-50%,-110px);
+
+  z-index:10;
+
+}
+
+.letter-paper h2{
+
+  color:#9b7a17;
+
+  margin-top:0;
+  margin-bottom:20px;
+
+  text-align:center;
+
+  font-size:21px;
+
+  line-height:1.3;
+
+}
+
+.letter-paper p{
+
+  line-height:1.8;
+
+  font-size:14px;
+
+  margin:0 0 20px;
+
+  overflow-wrap:break-word;
+
+  word-wrap:break-word;
+
+}
+
+.envelope{
+
+  width:280px;
+  height:180px;
+
+  background:#e8e3d7;
+
+  position:absolute;
+
+  bottom:0;
+  left:50%;
+
+  transform:translateX(-50%);
+
+  border-radius:5px;
+
+  box-shadow:
+    0 10px 35px
+    rgba(0,0,0,.5);
+
+  z-index:6;
+
+}
+
+.envelope::after{
+
+  content:"";
+
+  position:absolute;
+
+  left:0;
+  bottom:0;
+
+  width:0;
+  height:0;
+
+  border-left:
+    140px solid transparent;
+
+  border-right:
+    140px solid transparent;
+
+  border-bottom:
+    100px solid #d8d1c1;
+
+  z-index:8;
+
+}
+
+.envelope::before{
+
+  content:"";
+
+  position:absolute;
+
+  left:0;
+  top:0;
+
+  width:0;
+  height:0;
+
+  border-left:
+    140px solid transparent;
+
+  border-right:
+    140px solid transparent;
+
+  border-top:
+    100px solid #cfc7b5;
+
+  transform-origin:top;
+
+  transition:.8s;
+
+  z-index:9;
+
+}
+
+.envelope.open::before{
+
+  transform:rotateX(180deg);
+
+}
+
+/* FLOWER */
+
+.flower-area{
+
+  margin:50px auto;
+
+  height:330px;
+
+  position:relative;
+
+  width:280px;
+
+}
+
+.flower{
+
+  position:absolute;
+
+  left:50%;
+  top:40px;
+
+  transform:translateX(-50%);
+
+  width:120px;
+  height:120px;
+
+}
+
+.petal{
+
+  width:65px;
+  height:65px;
+
+  background:#d4af37;
+
+  border-radius:50%;
+
+  position:absolute;
+
+  box-shadow:
+    0 0 15px
+    rgba(212,175,55,.3);
+
+}
+
+.petal:nth-child(1){
+  top:0;
+  left:28px;
+}
+
+.petal:nth-child(2){
+  top:28px;
+  left:0;
+}
+
+.petal:nth-child(3){
+  top:28px;
+  right:0;
+}
+
+.petal:nth-child(4){
+  bottom:0;
+  left:28px;
+}
+
+.flower-center{
+
+  position:absolute;
+
+  width:45px;
+  height:45px;
+
+  background:#111;
+
+  border:3px solid #d4af37;
+
+  border-radius:50%;
+
+  top:37px;
+  left:37px;
+
+  z-index:2;
+
+}
+
+.stem{
+
+  position:absolute;
+
+  width:8px;
+  height:170px;
+
+  background:#476b3c;
+
+  left:136px;
+  top:145px;
+
+  border-radius:10px;
+
+}
+
+.leaf{
+
+  position:absolute;
+
+  width:65px;
+  height:30px;
+
+  background:#476b3c;
+
+  border-radius:100% 0;
+
+}
+
+.leaf.one{
+
+  left:75px;
+  top:200px;
+
+  transform:rotate(25deg);
+
+}
+
+.leaf.two{
+
+  left:140px;
+  top:240px;
+
+  transform:rotate(155deg);
+
+}
+
+/* CAKE */
+
+.cake{
+
+  width:230px;
+  height:120px;
+
+  background:#f1eee5;
+
+  margin:80px auto 20px;
+
+  border-radius:
+    10px 10px 20px 20px;
+
+  position:relative;
+
+  border-bottom:
+    15px solid #d4af37;
+
+  box-shadow:
+    0 15px 30px
+    rgba(0,0,0,.5);
+
+}
+
+.cake::before{
+
+  content:"";
+
+  position:absolute;
+
+  width:100%;
+  height:25px;
+
+  background:#d4af37;
+
+  top:35px;
+  left:0;
+
+}
+
+.candle{
+
+  width:16px;
+  height:65px;
+
+  background:#111;
+
+  border:2px solid #d4af37;
+
+  position:absolute;
+
+  top:-65px;
+  left:107px;
+
+}
+
+.flame{
+
+  width:22px;
+  height:30px;
+
+  background:#d4af37;
+
+  border-radius:
+    50% 50% 50% 0;
+
+  transform:rotate(-45deg);
+
+  position:absolute;
+
+  top:-35px;
+  left:-5px;
+
+  animation:
+    flame .7s infinite alternate;
+
+}
+
+@keyframes flame{
+
+  from{
+    transform:
+      rotate(-45deg)
+      scale(1);
+  }
+
+  to{
+    transform:
+      rotate(-45deg)
+      scale(1.15);
+  }
+
+}
+
+/* GIFTS */
+
+.gifts{
+
+  display:flex;
+
+  justify-content:center;
+
+  align-items:flex-start;
+
+  gap:30px;
+
+  flex-wrap:wrap;
+
+  max-width:900px;
+
+  margin:50px auto 30px;
+
+}
+
+.gift-box{
+
+  width:140px;
+  height:140px;
+
+  background:#f0eee7;
+
+  position:relative;
+
+  cursor:pointer;
+
+  transition:.35s;
+
+  border-radius:5px;
+
+  box-shadow:
+    0 10px 25px
+    rgba(0,0,0,.4);
+
+}
+
+.gift-box:hover{
+
+  transform:
+    translateY(-10px)
+    rotate(-2deg);
+
+}
+
+.gift-box::before{
+
+  content:"";
+
+  position:absolute;
+
+  width:25px;
+  height:100%;
+
+  background:#d4af37;
+
+  left:58px;
+
+}
+
+.gift-box::after{
+
+  content:"";
+
+  position:absolute;
+
+  width:100%;
+  height:25px;
+
+  background:#d4af37;
+
+  top:58px;
+  left:0;
+
+}
+
+.gift-lid{
+
+  position:absolute;
+
+  width:155px;
+  height:30px;
+
+  background:#d4af37;
+
+  left:-7px;
+  top:-18px;
+
+  border-radius:4px;
+
+  z-index:2;
+
+}
+
+.gift-number{
+
+  position:absolute;
+
+  z-index:5;
+
+  color:#111;
+
+  font-weight:bold;
+
+  font-size:13px;
+
+  top:6px;
+
+  left:50%;
+
+  transform:
+    translateX(-50%);
+
+}
+
+.gift-message{
+
+  display:none;
+
+  max-width:500px;
+
+  margin:30px auto;
+
+  padding:20px;
+
+  border:
+    1px solid #d4af37;
+
+  border-radius:15px;
+
+  color:#eee;
+
+  background:#0c0c0c;
+
+  line-height:1.7;
+
+}
+
+.gift-message.show{
+
+  display:block;
+
+  animation:
+    fadeIn .5s ease;
+
+}
+
+/* OPEN WHEN */
+
+.open-when-section{
+
+  display:none;
+
+  max-width:600px;
+
+  margin:30px auto;
+
+  animation:
+    fadeIn .6s ease;
+
+}
+
+.open-when-section.show{
+
+  display:block;
+
+}
+
+.open-when-title{
+
+  color:#d4af37;
+
+  font-size:25px;
+
+  margin-bottom:10px;
+
+}
+
+.open-when-subtitle{
+
+  color:#999;
+
+  font-size:14px;
+
+  margin-bottom:25px;
+
+}
+
+.when-buttons{
+
+  display:flex;
+
+  justify-content:center;
+
+  gap:12px;
+
+  flex-wrap:wrap;
+
+}
+
+.when-buttons button{
+
+  border:
+    1px solid #d4af37;
+
+  background:#0c0c0c;
+
+  color:#eee;
+
+  padding:12px 18px;
+
+  border-radius:25px;
+
+  cursor:pointer;
+
+  font-family:inherit;
+
+  transition:.3s;
+
+}
+
+.when-buttons button:hover{
+
+  background:#d4af37;
+
+  color:#050505;
+
+  transform:
+    translateY(-3px);
+
+}
+
+.when-message{
+
+  display:none;
+
+  margin:25px auto 0;
+
+  padding:22px;
+
+  max-width:500px;
+
+  border:
+    1px solid rgba(212,175,55,.5);
+
+  border-radius:15px;
+
+  background:#0c0c0c;
+
+  color:#eee;
+
+  line-height:1.8;
+
+  animation:
+    fadeIn .5s ease;
+
+}
+
+.when-message.show{
+
+  display:block;
+
+}
+
+/* HEART */
+
+.heart-section{
+
+  display:none;
+
+  margin:30px auto;
+
+  max-width:600px;
+
+}
+
+.heart-section.show{
+
+  display:block;
+
+  animation:
+    fadeIn .6s ease;
+
+}
+
+.heart-title{
+
+  color:#d4af37;
+
+  font-size:24px;
+
+  margin-bottom:10px;
+
+}
+
+.heart-subtitle{
+
+  color:#999;
+
+  font-size:14px;
+
+  margin-bottom:20px;
+
+}
+
+.heart-container{
+
+  width:340px;
+  height:310px;
+
+  margin:0 auto 25px;
+
+  position:relative;
+
+}
+
+.heart-word{
+
+  position:absolute;
+
+  transform:
+    translate(-50%,-50%)
+    scale(0);
+
+  color:#d4af37;
+
+  font-size:10px;
+
+  font-weight:bold;
+
+  white-space:nowrap;
+
+  opacity:0;
+
+  text-shadow:
+    0 0 8px
+    rgba(212,175,55,.3);
+
+  transition:
+    transform .45s ease,
+    opacity .45s ease;
+
+}
+
+.heart-word.visible{
+
+  opacity:1;
+
+  transform:
+    translate(-50%,-50%)
+    scale(1);
+
+}
+
+.heart-container.complete
+.heart-word{
+
+  animation:
+    gentleHeartPulse
+    1.5s ease-in-out infinite;
+
+}
+
+@keyframes gentleHeartPulse{
+
+  0%,100%{
+
+    transform:
+      translate(-50%,-50%)
+      scale(1);
+
+  }
+
+  50%{
+
+    transform:
+      translate(-50%,-50%)
+      scale(1.08);
+
+    text-shadow:
+      0 0 15px
+      rgba(212,175,55,.8);
+
+  }
+
+}
+
+.heart-caption{
+
+  color:#ddd;
+
+  font-size:17px;
+
+  margin-top:10px;
+
+}
+
+.replay-btn{
+
+  margin-top:10px;
+
+}
+
+/* CONFETTI */
+
+.confetti{
+
+  position:fixed;
+
+  width:7px;
+  height:12px;
+
+  top:-20px;
+
+  z-index:100;
+
+  animation:
+    fall 4s linear forwards;
+
+}
+
+@keyframes fall{
+
+  to{
+
+    transform:
+      translateY(110vh)
+      rotate(720deg);
+
+  }
+
+}
+
+/* FADE */
+
+@keyframes fadeIn{
+
+  from{
+
+    opacity:0;
+
+    transform:
+      translateY(10px);
+
+  }
+
+  to{
+
+    opacity:1;
+
+    transform:
+      translateY(0);
+
+  }
+
+}
+
+/* MOBILE */
+
+@media(max-width:600px){
+
+  h1{
+    font-size:45px;
+  }
+
+  .page-title{
+    font-size:30px;
+  }
+
+  .choice{
+
+    width:90%;
+    max-width:300px;
+
+  }
+
+  .gifts{
+
+    gap:35px 20px;
+
+  }
+
+  .gift-box{
+
+    width:125px;
+    height:125px;
+
+  }
+
+  .gift-box::before{
+    left:50px;
+  }
+
+  .gift-box::after{
+    top:50px;
+  }
+
+  .gift-lid{
+    width:140px;
+  }
+
+  .heart-container{
+
+    width:300px;
+    height:280px;
+
+  }
+
+  .heart-word{
+    font-size:8px;
+  }
+
+  .envelope-area{
+
+    width:95vw;
+    max-width:320px;
+
+    height:500px;
+
+    margin-top:60px;
+
+  }
+
+  .letter-paper{
+
+    width:78vw;
+    max-width:285px;
+
+    padding:28px 20px;
+
+    max-height:68vh;
+
+  }
+
+  .letter-paper h2{
+
+    font-size:19px;
+
+    line-height:1.3;
+
+    margin-bottom:18px;
+
+  }
+
+  .letter-paper p{
+
+    font-size:13px;
+
+    line-height:1.8;
+
+    margin-bottom:19px;
+
+  }
+
+  .open-when-section{
+
+    width:95%;
+
+  }
+
+  .when-buttons{
+
+    flex-direction:column;
+
+    align-items:center;
+
+  }
+
+  .when-buttons button{
+
+    width:85%;
+    max-width:280px;
+
+  }
+
+}
+
+@media(max-width:360px){
+
+  .letter-paper{
+
+    width:78vw;
+
+    max-width:270px;
+
+    padding:25px 17px;
+
+    max-height:65vh;
+
+  }
+
+  .letter-paper h2{
+    font-size:18px;
+  }
+
+  .letter-paper p{
+
+    font-size:12px;
+
+    line-height:1.8;
+
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- SPARKLES -->
+
+<div class="sparkle s1">✦</div>
+<div class="sparkle s2">✧</div>
+<div class="sparkle s3">✦</div>
+<div class="sparkle s4">✧</div>
+<div class="sparkle s5">✦</div>
+
+
+<!-- HOME -->
+
+<section id="home" class="page active">
+
+  <div class="home-content">
+
+    <div class="small-title">
+      A Little Surprise
+    </div>
+
+    <h1>
+      Happy Birthday Mi amor!
+    </h1>
+
+    <p class="subtitle">
+      I made something for you pooo
+    </p>
+
+    <button
+      class="start-btn"
+      onclick="showPage('choices')">
+
+      Open Your Surprise
+
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- CHOICES -->
+
+<section id="choices" class="page">
+
+  <h2 class="page-title">
+    Choose Your Surprise
+  </h2>
+
+  <p class="page-subtitle">
+    There are a few little things waiting for you.
+  </p>
+
+  <div class="choice-container">
+
+    <div
+      class="choice"
+      onclick="showPage('letterPage')">
+
+      <div class="choice-icon">
+        ✉
+      </div>
+
+      <h3>
+        letter for you babyy
+      </h3>
+
+      <p>
+        Something written from the heart.
+      </p>
+
+    </div>
+
+
+    <div
+      class="choice"
+      onclick="showPage('flowerPage')">
+
+      <div class="choice-icon">
+        ❀
+      </div>
+
+      <h3>
+        Flower & Cake
+      </h3>
+
+      <p>
+        A little birthday celebration.
+      </p>
+
+    </div>
+
+
+    <div
+      class="choice"
+      onclick="showPage('giftPage')">
+
+      <div class="choice-icon">
+        ♢
+      </div>
+
+      <h3>
+        Gifts
+      </h3>
+
+      <p>
+        Four little surprises are waiting.
+      </p>
+
+    </div>
+
+  </div>
+
+  <br><br>
+
+  <button
+    class="back-btn"
+    onclick="showPage('home')">
+
+    Back
+
+  </button>
+
+</section>
+
+
+<!-- LETTER -->
+
+<section id="letterPage" class="page">
+
+  <h2 class="page-title">
+    A Little Letter
+  </h2>
+
+  <p class="page-subtitle">
+    Tap the envelope.
+  </p>
+
+
+  <div
+    class="envelope-area"
+    onclick="openLetter()">
+
+    <div
+      class="letter-paper"
+      id="letter">
+
+      <h2>
+        Happy Birthday mi amor!
+      </h2>
+
+      <p>
+
+        Happy birthday babyy hindi sapat ang thank you
+        pero thank you po dahil nandito po ikaw always para
+        sa akin, sobrang thankful po ako na dumating ka sa life ko,
+        you made me happy again po napalabas mo nga mga side ko na
+        hindi naman alam ng iba ih, ang wish ko po for you ay sana po
+        matupad mo mga pangarap mo, sana po happy ikaw lagi, and
+        maayos po kalusugan mo (pwede maki wish baby? HAHAHA sana
+        po walang magbago sa ating dalawa)
+
+      </p>
+
+
+      <p>
+
+        I know na hindi kapo sanay na binabati sa birthday mo
+        sinabi mo po sakin yan but sorry po hehe makulit ako ih,
+        always remember po na nandito lang po ako okayyy? Soyie po
+        kung minsan ang gulo ko na, na kahit ako hindi ko napo
+        maintindihan yung sarili ko but sana po mag stay padin po
+        ikaw, lagi mo pong tandaan na naka suport po ako sayo haa,
+        I'm always here lang poo, kasama mo po ako pag happy ikaw or
+        kahit malungkot ka pa
+
+      </p>
+
+
+      <p>
+
+        Happy birthday po ulit baby Camil ko, enjoy your day po,
+        I love you sooo much mwuahhhhhh💋
+
+      </p>
+
+    </div>
+
+
+    <div
+      class="envelope"
+      id="envelope">
+    </div>
+
+  </div>
+
+  <br>
+
+  <button
+    class="back-btn"
+    onclick="showPage('choices')">
+
+    Back
+
+  </button>
+
+</section>
+
+
+<!-- FLOWER AND CAKE -->
+
+<section id="flowerPage" class="page">
+
+  <h2 class="page-title">
+    A Flower & Cake
+  </h2>
+
+  <p class="page-subtitle">
+    A tiny celebration just for you.
+  </p>
+
+
+  <div class="flower-area">
+
+    <div class="flower">
+
+      <div class="petal"></div>
+      <div class="petal"></div>
+      <div class="petal"></div>
+      <div class="petal"></div>
+
+      <div class="flower-center"></div>
+
+    </div>
+
+
+    <div class="stem"></div>
+
+    <div class="leaf one"></div>
+
+    <div class="leaf two"></div>
+
+  </div>
+
+
+  <div class="cake">
+
+    <div class="candle">
+
+      <div class="flame"></div>
+
+    </div>
+
+  </div>
+
+
+  <button
+    class="action-btn"
+    onclick="makeWish()">
+
+    Make a Wish
+
+  </button>
+
+  <br><br>
+
+  <button
+    class="back-btn"
+    onclick="showPage('choices')">
+
+    Back
+
+  </button>
+
+</section>
+
+
+<!-- GIFTS -->
+
+<section id="giftPage" class="page">
+
+  <h2 class="page-title">
+    Your Gifts
+  </h2>
+
+  <p class="page-subtitle">
+    Choose one.
+  </p>
+
+
+  <div class="gifts">
+
+    <!-- GIFT 1 -->
+
+    <div
+      class="gift-box"
+      onclick="openGift(1)">
+
+      <div class="gift-lid"></div>
+
+      <div class="gift-number">
+        1
+      </div>
+
+    </div>
+
+
+    <!-- GIFT 2 -->
+
+    <div
+      class="gift-box"
+      onclick="openGift(2)">
+
+      <div class="gift-lid"></div>
+
+      <div class="gift-number">
+        2
+      </div>
+
+    </div>
+
+
+    <!-- GIFT 3 -->
+
+    <div
+      class="gift-box"
+      onclick="openWhenGift()">
+
+      <div class="gift-lid"></div>
+
+      <div class="gift-number">
+        3
+      </div>
+
+    </div>
+
+
+    <!-- GIFT 4 -->
+
+    <div
+      class="gift-box"
+      onclick="openHeart()">
+
+      <div class="gift-lid"></div>
+
+      <div class="gift-number">
+        4
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- NORMAL GIFT MESSAGE -->
+
+  <div
+    id="giftMessage"
+    class="gift-message">
+  </div>
+
+
+  <!-- OPEN WHEN -->
+
+  <div
+    id="openWhenSection"
+    class="open-when-section">
+
+    <div class="open-when-title">
+      Open When... 💌
+    </div>
+
+    <div class="open-when-subtitle">
+      Choose one little message made just for you.
+    </div>
+
+
+    <div class="when-buttons">
+
+      <button
+        onclick="showWhenMessage('happy')">
+
+        😊 When you're happy
+
+      </button>
+
+
+      <button
+        onclick="showWhenMessage('sad')">
+
+        🤍 When you're sad
+
+      </button>
+
+
+      <button
+        onclick="showWhenMessage('miss')">
+
+        🥹 When you miss me
+
+      </button>
+
+
+      <button
+        onclick="showWhenMessage('tired')">
+
+        🌷 When you're tired
+
+      </button>
+
+    </div>
+
+
+    <div
+      id="whenMessage"
+      class="when-message">
+    </div>
+
+  </div>
+
+
+  <!-- HEART -->
+
+  <div
+    id="heartSection"
+    class="heart-section">
+
+    <div class="heart-title">
+      A Little Heart
+    </div>
+
+    <div class="heart-subtitle">
+      Watch the words come together.
+    </div>
+
+
+    <div
+      id="heartContainer"
+      class="heart-container">
+    </div>
+
+
+    <p class="heart-caption">
+      I LOVE YOU
+    </p>
+
+
+    <button
+      class="action-btn replay-btn"
+      onclick="openHeart()">
+
+      Make the Heart Again
+
+    </button>
+
+  </div>
+
+
+  <br><br>
+
+  <button
+    class="back-btn"
+    onclick="showPage('choices')">
+
+    Back
+
+  </button>
+
+</section>
+
+
+<script>
+
+/* PAGE NAVIGATION */
+
+function showPage(pageId){
+
+  var pages =
+    document.querySelectorAll(".page");
+
+  for(
+    var i = 0;
+    i < pages.length;
+    i++
+  ){
+
+    pages[i].classList.remove("active");
+
+  }
+
+  document
+    .getElementById(pageId)
+    .classList.add("active");
+
+  window.scrollTo(0,0);
+
+}
+
+
+/* LETTER */
+
+function openLetter(){
+
+  var envelope =
+    document.getElementById("envelope");
+
+  var letter =
+    document.getElementById("letter");
+
+  envelope.classList.toggle("open");
+
+  setTimeout(
+    function(){
+
+      letter.classList.toggle("show");
+
+    },
+    350
+  );
+
+}
+
+
+/* WISH */
+
+function makeWish(){
+
+  createConfetti();
+
+  alert(
+    "Make a wish and enjoy your special day!"
+  );
+
+}
+
+
+/* GIFTS 1 AND 2 */
+
+function openGift(number){
+
+  var message =
+    document.getElementById("giftMessage");
+
+  var heartSection =
+    document.getElementById("heartSection");
+
+  var openWhenSection =
+    document.getElementById("openWhenSection");
+
+  heartSection.classList.remove("show");
+
+  openWhenSection.classList.remove("show");
+
+
+  if(number === 1){
+
+    message.innerHTML =
+      "<strong>Gift #1</strong><br><br>" +
+      "Happy Birthday babyy. " +
+      "Enjoy your special day po";
+
+    message.classList.add("show");
+
+    createConfetti();
+
+  }
+
+
+  if(number === 2){
+
+    message.innerHTML =
+      "<strong>Gift #2</strong><br><br>" +
+      "May you receive more happiness, " +
+      "laughter, and beautiful memories this year.";
+
+    message.classList.add("show");
+
+    createConfetti();
+
+  }
+
+}
+
+
+/* GIFT 3 */
+
+function openWhenGift(){
+
+  var message =
+    document.getElementById("giftMessage");
+
+  var heartSection =
+    document.getElementById("heartSection");
+
+  var openWhenSection =
+    document.getElementById("openWhenSection");
+
+  var whenMessage =
+    document.getElementById("whenMessage");
+
+
+  message.classList.remove("show");
+
+  heartSection.classList.remove("show");
+
+  openWhenSection.classList.add("show");
+
+  whenMessage.classList.remove("show");
+
+  whenMessage.innerHTML = "";
+
+  createConfetti();
+
+}
+
+
+/* OPEN WHEN MESSAGES */
+
+function showWhenMessage(type){
+
+  var message =
+    document.getElementById("whenMessage");
+
+
+  if(type === "happy"){
+
+    message.innerHTML =
+
+      "<strong>When you're happy... 😊</strong><br><br>" +
+
+      "I hope you know how happy it makes me " +
+      "to see you happy. Keep that smile, okayyy? " +
+
+      "You deserve all the happiness that comes your way. 💗";
+
+  }
+
+
+  if(type === "sad"){
+
+    message.innerHTML =
+
+      "<strong>When you're sad... 🤍</strong><br><br>" +
+
+      "It's okay to have bad days. You don't always " +
+      "have to be strong. Just remember that you're " +
+      "not alone, I'm always here po baby " +
+      "I'll always listen to you. 🫂";
+
+  }
+
+
+  if(type === "miss"){
+
+    message.innerHTML =
+
+      "<strong>When you miss me... 🥹</strong><br><br>" +
+
+      "I miss you more babyy. Remember that " +
+      "even when we're not together, you're still " +
+      "someone very special to me. So don't forget me " +
+      "okayyy? 💌";
+
+  }
+
+
+  if(type === "tired"){
+
+    message.innerHTML =
+
+      "<strong>When you're tired... 🌷</strong><br><br>" +
+
+      "Rest for a while, baby. You don't have to do " +
+      "everything at once. Take a deep breath, relax, " +
+      "and remember that you're doing your best. " +
+      "I'm proud of you. 🤍";
+
+  }
+
+
+  message.classList.remove("show");
+
+
+  setTimeout(
+    function(){
+
+      message.classList.add("show");
+
+    },
+    50
+  );
+
+}
+
+
+/* HEART */
+
+function openHeart(){
+
+  var message =
+    document.getElementById("giftMessage");
+
+  var section =
+    document.getElementById("heartSection");
+
+  var openWhenSection =
+    document.getElementById("openWhenSection");
+
+  var container =
+    document.getElementById("heartContainer");
+
+
+  message.classList.remove("show");
+
+  openWhenSection.classList.remove("show");
+
+  section.classList.add("show");
+
+
+  container.innerHTML = "";
+
+  container.classList.remove("complete");
+
+
+  var totalWords = 46;
+
+
+  for(
+    var i = 0;
+    i < totalWords;
+    i++
+  ){
+
+    var t =
+      (Math.PI * 2 * i) /
+      totalWords;
+
+
+    var x =
+      16 *
+      Math.pow(
+        Math.sin(t),
+        3
+      );
+
+
+    var y =
+      13 * Math.cos(t)
+      - 5 * Math.cos(2 * t)
+      - 2 * Math.cos(3 * t)
+      - Math.cos(4 * t);
+
+
+    var left =
+      50 +
+      (x * 2.45);
+
+
+    var top =
+      48 -
+      (y * 2.55);
+
+
+    var word =
+      document.createElement("span");
+
+
+    word.className =
+      "heart-word";
+
+
+    word.innerHTML =
+      "I LOVE YOU";
+
+
+    word.style.left =
+      left + "%";
+
+
+    word.style.top =
+      top + "%";
+
+
+    if(i % 3 === 0){
+
+      word.style.color =
+        "#ffffff";
+
+    }else{
+
+      word.style.color =
+        "#d4af37";
+
+    }
+
+
+    container.appendChild(word);
+
+
+    setTimeout(
+
+      function(currentWord){
+
+        currentWord.classList.add(
+          "visible"
+        );
+
+      },
+
+      i * 65,
+
+      word
+
+    );
+
+  }
+
+
+  setTimeout(
+
+    function(){
+
+      container.classList.add(
+        "complete"
+      );
+
+    },
+
+    totalWords * 65 + 700
+
+  );
+
+
+  createConfetti();
+
+}
+
+
+/* CONFETTI */
+
+function createConfetti(){
+
+  for(
+    var i = 0;
+    i < 35;
+    i++
+  ){
+
+    var piece =
+      document.createElement("div");
+
+
+    piece.className =
+      "confetti";
+
+
+    piece.style.left =
+      Math.random() * 100 +
+      "vw";
+
+
+    piece.style.background =
+      Math.random() > 0.5
+      ? "#d4af37"
+      : "#ffffff";
+
+
+    piece.style.animationDuration =
+      (2 + Math.random() * 3) +
+      "s";
+
+
+    piece.style.animationDelay =
+      Math.random() +
+      "s";
+
+
+    document.body.appendChild(piece);
+
+
+    setTimeout(
+
+      function(currentPiece){
+
+        if(currentPiece){
+
+          currentPiece.remove();
+
+        }
+
+      },
+
+      5000,
+
+      piece
+
+    );
+
+  }
+
+}
+
+</script>
+
+</body>
+</html>
